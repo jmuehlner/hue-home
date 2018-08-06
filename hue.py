@@ -66,14 +66,22 @@ if transition:
 
 # Prefetch all bridge state
 bridge_data = bridge.get_api()
+all_lights = set(light['name'] for light in bridge_data['lights'].values())
 
 # Apply the state to all the lights on the bridge if none are specified
 if lights is None and rooms is None:
-    bridge.set_light([light['name'] for light in bridge_data['lights'].values()], action)
+    bridge.set_light(all_lights, action)
     sys.exit(0) 
 
 # Just set the lights
 if lights:
+    lights = set(lights)
+
+    invalid_lights = lights.difference(all_lights)
+    if invalid_lights:
+        LOGGER.error('{} are invalid. Valid lights: {}.'.format(list(invalid_lights), list(all_lights)))
+	sys.exit(1)
+
     bridge.set_light(lights, action)
 
 # Apply state to all lights in the rooms
@@ -84,7 +92,7 @@ if rooms:
      
     invalid_rooms = set(rooms).difference(all_rooms.keys())    
     if invalid_rooms:
-	LOGGER.error('"{}" are not valid rooms.'.format(list(invalid_rooms)))
+        LOGGER.error('{} are invalid. Valid rooms: {}.'.format(list(invalid_rooms), list(all_rooms)))
 	sys.exit(1)
 
     # Get all light IDs from all specified rooms
