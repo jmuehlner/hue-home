@@ -10,7 +10,7 @@ import sys
 logging.basicConfig()
 
 LOGGER = logging.getLogger(__name__)
-NUMERIC_MATCHER = re.compile(r'([0-9]{1,3})%?')
+NUMERIC_MATCHER = re.compile(r'([0-9]{1,3})')
 
 def hue_state_parser(value, *args, **kwargs):
 
