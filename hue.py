@@ -33,9 +33,9 @@ def hue_state_parser(value):
 parser = argparse.ArgumentParser(description='Hue Control.')
 parser.add_argument('state', type=hue_state_parser,
                     help='The state to set the light(s) to - may be on/off or a brightness from 1 to 254.')
-parser.add_argument('-l',  nargs='+', help='A light or set of lights to apply the new state to.')
-parser.add_argument('-r',  nargs='+', help='A room or set of rooms to apply the new state to.')
-parser.add_argument('-t', type=int, help='Transition time.')
+parser.add_argument('-l', action='append', help='A light to apply the new state to. Can be specified multiple times.')
+parser.add_argument('-r', action='append', help='A room to apply the new state to. Can be specified multiple times.')
+parser.add_argument('-t', type=int, help='Transition time, in seconds.')
 args = parser.parse_args()
 
 state = args.state
