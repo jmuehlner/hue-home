@@ -4,13 +4,11 @@ from phue import Bridge
 
 import argparse
 import logging
-import re
 import sys
 
 logging.basicConfig()
 
 LOGGER = logging.getLogger(__name__)
-NUMERIC_MATCHER = re.compile(r'([0-9]{1,3})')
 
 def hue_state_parser(value, *args, **kwargs):
 
@@ -20,16 +18,16 @@ def hue_state_parser(value, *args, **kwargs):
         return value
 
     # Check if it's a valid number
-    matches = NUMERIC_MATCHER.match(value)
-    if not matches:
-        raise argparse.ArgumentError('Invalid state: "{}".'.format(value))
+    try:
+        value = int(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError('Invalid state: "{}".'.format(value))
 
     # At this point, it must be a valid integer
-    number = int(matches.group(1))
-    if number > 254 or number < 1:
-        raise argparse.ArgumentError('Brightness must be < 255 and > 0.')
+    if value > 254 or value < 1:
+        raise argparse.ArgumentTypeError('Brightness must be < 255 and > 0.')
 
-    return number
+    return value
 
 
 parser = argparse.ArgumentParser(description='Hue Control.')
