@@ -10,7 +10,7 @@ logging.basicConfig()
 
 LOGGER = logging.getLogger(__name__)
 
-def hue_state_parser(value, *args, **kwargs):
+def hue_state_parser(value):
 
     # First check if it's simply on or off
     value = value.lower()
